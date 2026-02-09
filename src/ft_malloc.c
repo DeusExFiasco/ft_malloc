@@ -32,7 +32,7 @@ void *ft_malloc(size_t bytes) {
 
     if (freep == NULL)
         init_heap();
-    words = bytes_to_units(bytes);
+    words = btow(bytes);
     prev = freep;
     curr = prev->header.next;
 
@@ -82,6 +82,6 @@ void ft_free(void *ptr) {
     freep = curr;
 }
 
-void *ft_realloc(size_t bytes, void *ptr) {
-    // TODO: Implement lmao
-}
+// void *ft_realloc(size_t bytes, void *ptr) {
+//     // TODO: Implement lmao
+// }

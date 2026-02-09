@@ -14,7 +14,7 @@ struct s_header {
 
 struct s_block {
     t_header header;
-    // memory
+    // memory blocks...
 };
 
 void *ft_malloc(size_t bytes);
