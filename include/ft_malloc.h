@@ -7,6 +7,12 @@ typedef int32_t t_word;
 typedef struct s_header t_header;
 typedef struct s_block t_block;
 
+typedef enum e_allocs {
+    TINY,
+    MEDIUM,
+    LARGE
+} t_allocs;
+
 struct s_header {
     t_word size;
     t_block *next; 

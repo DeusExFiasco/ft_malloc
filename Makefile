@@ -14,13 +14,18 @@ SRC_DIR = src
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC_FILES:.c=.o)
 
+TEST_DIR = tests
+TEST_SRC = $(TEST_DIR)/main.c
+TEST_BIN = $(TEST_DIR)/test_malloc
+
 all: $(LIB) $(NAME)
 
 $(LIB):
 	$(MAKE) -C libft
 
-$(NAME): $(OBJ) $(LIB)
-	$(CC) $(LDFLAGS) -o $(NAME) $(OBJ) $(LIB)
+$(NAME): $(OBJ)
+	$(CC) $(LDFLAGS) -o $(NAME) $(OBJ)
+	@echo "libft_malloc compiled successfully!"
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -42,5 +47,8 @@ reclean: re .FORCE
 
 allclean: all .FORCE
 	@$(MAKE) clean
+
+test: $(NAME) $(TEST_SRC)
+    $(CC) -Iinclude -L. -Wl,-rpath,. -l:$(NAME) $(TEST_SRC) -o $(TEST_BIN)
 
 .PHONY: all clean fclean re reclean allclean .FORCE
