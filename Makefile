@@ -49,6 +49,6 @@ allclean: all .FORCE
 	@$(MAKE) clean
 
 test: $(NAME) $(TEST_SRC)
-    $(CC) -Iinclude -L. -Wl,-rpath,. -l:$(NAME) $(TEST_SRC) -o $(TEST_BIN)
+	$(CC) -Iinclude -L. -Wl,-rpath,. -l:$(NAME) $(TEST_SRC) -o $(TEST_BIN)
 
-.PHONY: all clean fclean re reclean allclean .FORCE
+.PHONY: all clean fclean re reclean allclean test .FORCE
