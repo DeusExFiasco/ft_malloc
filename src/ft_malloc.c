@@ -14,14 +14,18 @@ static t_word btow(size_t bytes) {
 }
 
 static t_block *getmem(t_word words) {
+    size_t size;
+    t_block *block;
+
     if (words < MINALLOC)
         words = MINALLOC;
-    size_t size = words * sizeof(t_header);
-    t_block *block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+    size = words * sizeof(t_header);
+    block = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
     if (block == MAP_FAILED)
         return NULL;
     block->header.size = words;
     ft_free((void *)(block + 1));
+
     return freep;
 }
 
@@ -35,8 +39,7 @@ void *ft_malloc(size_t bytes) {
     words = btow(bytes);
     prev = freep;
     curr = prev->header.next;
-
-    for (;; prev = curr, curr = curr->header.next) {
+    while (prev = curr) {
         if (curr->header.size >= words) {
             if (curr->header.size == words)
                 prev->header.next = curr->header.next;
@@ -53,6 +56,7 @@ void *ft_malloc(size_t bytes) {
             if (curr == NULL)
                 return NULL;
         }
+        curr = curr->header.next;
     }
 }
 
@@ -63,10 +67,11 @@ void ft_free(void *ptr) {
     if (ptr == NULL)
         return;
     block = (t_block *)ptr - 1;
-
-    for (curr = freep; !(block > curr && block < curr->header.next); curr = curr->header.next) {
+    curr = freep;
+    while (!(block > curr && block < curr->header.next)) {
         if (curr >= curr->header.next && (block > curr || block < curr->header.next))
             break;
+        curr = curr->header.next;
     }
     if (block + block->header.size == curr->header.next) {
         block->header.size += curr->header.next->header.size;
